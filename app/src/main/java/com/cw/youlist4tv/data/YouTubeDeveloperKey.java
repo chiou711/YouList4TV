@@ -28,5 +28,6 @@ public class YouTubeDeveloperKey {
    * to register a new developer key.
    */
   public static final String DEVELOPER_KEY = "";
+  public static final String SHA_1 = "";
 
 }

@@ -3,9 +3,12 @@ package com.cw.youlist4tv.data;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class YouTubeTimeConvert {
@@ -15,27 +18,31 @@ public class YouTubeTimeConvert {
      * @return "01:02:30"
      */
     public static String convertYouTubeDuration(String duration) {
-        String youtubeDuration = duration; //"PT1H2M30S"; // "PT1M13S";
+
+        List<String> patternList = new ArrayList<>();
+        patternList.add("'PT'mm'M'ss'S'");
+        patternList.add("'PT'hh'H'mm'M'ss'S'");
+        patternList.add("'PT'ss'S'");
+        patternList.add("'PT'hh'H'ss'S'");
+        patternList.add("'PT'mm'M'");
+        patternList.add("'P0D'");
+
         Calendar c = new GregorianCalendar();
-        try {
-            DateFormat df = new SimpleDateFormat("'PT'mm'M'ss'S'");
-            Date d = df.parse(youtubeDuration);
-            c.setTime(d);
-        } catch (ParseException e) {
-            try {
-                DateFormat df = new SimpleDateFormat("'PT'hh'H'mm'M'ss'S'");
-                Date d = df.parse(youtubeDuration);
+        Date d;
+        for(int i=0;i<patternList.size();i++) {
+            d = getParsedTime(patternList.get(i), duration);
+
+            if(d != null) {
                 c.setTime(d);
-            } catch (ParseException e1) {
-                try {
-                    DateFormat df = new SimpleDateFormat("'PT'ss'S'");
-                    Date d = df.parse(youtubeDuration);
-                    c.setTime(d);
-                } catch (ParseException e2) {
-                }
+                break;
             }
         }
         c.setTimeZone(TimeZone.getDefault());
+
+        // check
+//        System.out.println("--- c.get(Calendar.HOUR) = " + c.get(Calendar.HOUR));
+//        System.out.println("--- c.get(Calendar.MINUTE) = " + c.get(Calendar.MINUTE));
+//        System.out.println("--- c.get(Calendar.SECOND) = " + c.get(Calendar.SECOND));
 
         String time = "";
         if ( c.get(Calendar.HOUR) > 0 ) {
@@ -64,4 +71,17 @@ public class YouTubeTimeConvert {
         }
         return time ;
     }
+
+    // get parsed time
+    static Date getParsedTime(String patternStr, String duration){
+        DateFormat df = new SimpleDateFormat(patternStr, Locale.US);
+        Date d = null;
+        try {
+            d = df.parse(duration);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
+    }
+
 }

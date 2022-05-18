@@ -41,6 +41,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.cw.youlist4tv.BuildConfig;
 import com.cw.youlist4tv.Pref;
 import com.cw.youlist4tv.R;
 import com.cw.youlist4tv.Utils;
@@ -51,6 +52,7 @@ import com.cw.youlist4tv.model.Video;
 import com.cw.youlist4tv.ui.MainFragment;
 import com.cw.youlist4tv.ui.VideoDetailsActivity;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -88,7 +90,7 @@ public class CardPresenter extends Presenter {
             public void initialize(HttpRequest request) throws IOException {
             }
         }
-        ).setApplicationName("YouList4TV").build();
+        ).setApplicationName(act.getString(R.string.app_name)).build();
     }
 
     @Override
@@ -267,6 +269,14 @@ public class CardPresenter extends Presenter {
 
                     YouTube.Videos.List videosListMultipleIdsRequest = youtube.videos().list(parameters.get("part"));
                     videosListMultipleIdsRequest.setKey(YouTubeDeveloperKey.DEVELOPER_KEY);
+
+                    // set http headers for restricting Android App
+                    HttpHeaders httpHeaders = new HttpHeaders();
+                    httpHeaders.set("Content-Type","application/json");
+                    httpHeaders.set("X-Android-Package",BuildConfig.APPLICATION_ID);
+                    httpHeaders.set("X-Android-Cert",YouTubeDeveloperKey.SHA_1);
+                    videosListMultipleIdsRequest.setRequestHeaders(httpHeaders);
+
                     if (parameters.containsKey("id") && parameters.get("id") != "") {
                         videosListMultipleIdsRequest.setId(parameters.get("id"));
                     }
@@ -274,8 +284,9 @@ public class CardPresenter extends Presenter {
                     VideoListResponse response = videosListMultipleIdsRequest.execute();
 
                     String duration = response.getItems().get(0).getContentDetails().getDuration();
-                    acquiredDuration = YouTubeTimeConvert.convertYouTubeDuration(duration);
 //                    System.out.println("CardPresenter / _getDurations / runnable / duration" + "(" + 0 + ") = " + duration);
+                    acquiredDuration = YouTubeTimeConvert.convertYouTubeDuration(duration);
+//                    System.out.println("CardPresenter / _getDurations / runnable / acquiredDuration = " + acquiredDuration);
 
                     isGotDuration = true;
                 } catch (GoogleJsonResponseException e) {

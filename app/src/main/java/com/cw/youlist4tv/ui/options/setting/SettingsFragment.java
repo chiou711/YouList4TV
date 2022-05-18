@@ -216,7 +216,7 @@ public class SettingsFragment extends LeanbackSettingsFragment
                                 new HttpRequestInitializer() {
                                     public void initialize(HttpRequest request) throws IOException {
                                     }
-                                }).setApplicationName("YouList4TV").build();
+                                }).setApplicationName(act.getString(R.string.app_name)).build();
 
                         String videoId = Utils.getYoutubeId(linkUrl);
                         YouTube.Videos.List videoRequest = null;
