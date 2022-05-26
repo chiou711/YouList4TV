@@ -14,10 +14,10 @@ android {
         applicationId "com.cw.youlist4tv"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 2
-        versionName "1.4.0"
+        versionCode 7
+        versionName '0.0.7'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.debug
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {

@@ -6,7 +6,8 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:colorPrimary">@color/fastlane_background</item>
-    </style>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item></style>
 
     <style name="Theme.Leanback.Browse.New" parent="Theme.Leanback">
         <item name="searchOrbViewStyle">@style/ReplaceSearchOrbView</item>
