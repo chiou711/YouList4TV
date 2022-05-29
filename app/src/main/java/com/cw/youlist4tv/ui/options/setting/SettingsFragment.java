@@ -40,7 +40,6 @@ import com.cw.youlist4tv.Utils;
 import com.cw.youlist4tv.data.DbHelper;
 import com.cw.youlist4tv.data.VideoContract;
 import com.cw.youlist4tv.data.VideoProvider;
-import com.cw.youlist4tv.data.YouTubeDeveloperKey;
 import com.cw.youlist4tv.define.Define;
 import com.cw.youlist4tv.ui.MainActivity;
 import com.cw.youlist4tv.ui.MainFragment;
@@ -225,29 +224,32 @@ public class SettingsFragment extends LeanbackSettingsFragment
                         String videoId = Utils.getYoutubeId(linkUrl);
                         YouTube.Videos.List videoRequest = null;
                         try {
-                            videoRequest = youtube.videos().list("snippet,statistics,contentDetails");
+//                            videoRequest = youtube.videos().list("snippet,statistics,contentDetails");
+                            videoRequest = youtube.videos().list("snippet");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         videoRequest.setId(videoId);
 
-                        //get the KEY value from the meta-data in AndroidManifest
-                        ApplicationInfo ai = null;
+                        //get the key/values from the meta-data in AndroidManifest
+                        ApplicationInfo ai;
+                        String developer_key = null;
+                        String sha_1 = null;
                         try {
                             ai = getActivity().getPackageManager()
                                     .getApplicationInfo(getActivity().getPackageName(), PackageManager.GET_META_DATA);
-                            Bundle bundle = ai.metaData;
-                            String key = bundle.get("key_DEVELOPER_KEY").toString();
-                            videoRequest.setKey(key);
+                            developer_key = ai.metaData.get("key_DEVELOPER_KEY").toString();
+                            sha_1 = ai.metaData.get("key_SHA1").toString();
                         } catch (PackageManager.NameNotFoundException e) {
                             e.printStackTrace();
                         }
+                        videoRequest.setKey(developer_key);
 
                         // set http headers for restricting Android App
                         HttpHeaders httpHeaders = new HttpHeaders();
                         httpHeaders.set("Content-Type","application/json");
                         httpHeaders.set("X-Android-Package", BuildConfig.APPLICATION_ID);
-                        httpHeaders.set("X-Android-Cert",YouTubeDeveloperKey.SHA_1);
+                        httpHeaders.set("X-Android-Cert",sha_1);
                         videoRequest.setRequestHeaders(httpHeaders);
 
                         VideoListResponse listResponse = null;

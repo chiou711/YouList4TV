@@ -47,7 +47,6 @@ import com.cw.youlist4tv.BuildConfig;
 import com.cw.youlist4tv.Pref;
 import com.cw.youlist4tv.R;
 import com.cw.youlist4tv.Utils;
-import com.cw.youlist4tv.data.YouTubeDeveloperKey;
 import com.cw.youlist4tv.data.YouTubeTimeConvert;
 import com.cw.youlist4tv.define.Define;
 import com.cw.youlist4tv.model.Video;
@@ -271,21 +270,24 @@ public class CardPresenter extends Presenter {
 
                     YouTube.Videos.List videosListMultipleIdsRequest = youtube.videos().list(parameters.get("part"));
 
-                    //get the KEY value from the meta-data in AndroidManifest
+                    //get the key/values from the meta-data in AndroidManifest
+                    String developer_key = null;
+                    String sha_1 = null;
                     try {
                         ApplicationInfo ai = act.getPackageManager()
                                 .getApplicationInfo(act.getPackageName(), PackageManager.GET_META_DATA);
-                        String key = ai.metaData.get("key_DEVELOPER_KEY").toString();
-                        videosListMultipleIdsRequest.setKey(key);
+                        developer_key = ai.metaData.get("key_DEVELOPER_KEY").toString();
+                        sha_1 = ai.metaData.get("key_SHA1").toString();
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
+                    videosListMultipleIdsRequest.setKey(developer_key);
 
                     // set http headers for restricting Android App
                     HttpHeaders httpHeaders = new HttpHeaders();
                     httpHeaders.set("Content-Type","application/json");
                     httpHeaders.set("X-Android-Package",BuildConfig.APPLICATION_ID);
-                    httpHeaders.set("X-Android-Cert",YouTubeDeveloperKey.SHA_1);
+                    httpHeaders.set("X-Android-Cert",sha_1);
                     videosListMultipleIdsRequest.setRequestHeaders(httpHeaders);
 
                     if (parameters.containsKey("id") && parameters.get("id") != "") {

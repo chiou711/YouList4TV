@@ -141,6 +141,7 @@
             android:name="com.cw.youlist4tv.recommendation.UpdateRecommendationsService"
             android:enabled="true" />
 
+        <!-- notice: don't expose the key/values -->
         <meta-data
             android:name = "key_DEVELOPER_KEY"
             android:value = ""/>
