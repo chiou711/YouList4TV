@@ -145,6 +145,9 @@
         <meta-data
             android:name = "key_DEVELOPER_KEY"
             android:value = ""/>
+        <meta-data
+            android:name = "key_SHA1"
+            android:value = ""/>
 
         <activity
             android:name="com.cw.youlist4tv.ui.options.setting.SettingsActivity"
