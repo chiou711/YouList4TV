@@ -141,11 +141,10 @@
             android:name="com.cw.youlist4tv.recommendation.UpdateRecommendationsService"
             android:enabled="true" />
 
-        <activity
-            android:name="com.cw.youlist4tv.ui.misc.OnboardingActivity"
-            android:enabled="true"
-            android:exported="true"
-            android:theme="@style/Theme.Leanback.Onboarding" />
+        <meta-data
+            android:name = "key_DEVELOPER_KEY"
+            android:value = ""/>
+
         <activity
             android:name="com.cw.youlist4tv.ui.options.setting.SettingsActivity"
             android:exported="true"

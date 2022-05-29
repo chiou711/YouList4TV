@@ -17,6 +17,8 @@
 package com.cw.youlist4tv.presenter;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -268,7 +270,16 @@ public class CardPresenter extends Presenter {
                     parameters.put("id", stringsList);
 
                     YouTube.Videos.List videosListMultipleIdsRequest = youtube.videos().list(parameters.get("part"));
-                    videosListMultipleIdsRequest.setKey(YouTubeDeveloperKey.DEVELOPER_KEY);
+
+                    //get the KEY value from the meta-data in AndroidManifest
+                    try {
+                        ApplicationInfo ai = act.getPackageManager()
+                                .getApplicationInfo(act.getPackageName(), PackageManager.GET_META_DATA);
+                        String key = ai.metaData.get("key_DEVELOPER_KEY").toString();
+                        videosListMultipleIdsRequest.setKey(key);
+                    } catch (PackageManager.NameNotFoundException e) {
+                        e.printStackTrace();
+                    }
 
                     // set http headers for restricting Android App
                     HttpHeaders httpHeaders = new HttpHeaders();
