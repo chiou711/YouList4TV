@@ -969,9 +969,17 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
     // start YouTube intent
     private void startYouTubeIntentForResult(String url)
     {
-        String idStr = getYoutubeId(url);
-        //Intent intent = YouTubeIntents.createPlayVideoIntentWithOptions(act, idStr, true/*fullscreen*/, true/*finishOnEnd*/);
-        Intent intent  = YouTubeIntents.createPlayVideoIntent(act, idStr);
+        Intent intent;
+        if(url.contains("youtube.com/channel/")) {
+            // open channel
+            String CHANNEL_ID = url.replace("https://www.youtube.com/channel/", "");
+            intent = YouTubeIntents.createChannelIntent(act, CHANNEL_ID);
+
+        } else {
+            String idStr = getYoutubeId(url);
+            //Intent intent = YouTubeIntents.createPlayVideoIntentWithOptions(act, idStr, true/*fullscreen*/, true/*finishOnEnd*/);
+            intent  = YouTubeIntents.createPlayVideoIntent(act, idStr);
+        }
         intent.putExtra("force_fullscreen", true);
         intent.putExtra("finish_on_ended", true);
         startActivityForResult(intent, YOUTUBE_LINK_INTENT);
@@ -1516,7 +1524,9 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
 
         String path;
         // YouTube or HTML
-        if(!urlStr.contains("playlist") && ( urlStr.contains("youtube") || urlStr.contains("youtu.be") ))
+        if(urlStr.contains("youtube.com/channel/")){
+            path = ((Video) item).cardImageUrl;
+        } else if(!urlStr.contains("playlist") && ( urlStr.contains("youtube") || urlStr.contains("youtu.be") ))
             path = "https://img.youtube.com/vi/"+getYoutubeId(urlStr)+"/0.jpg";
         else
             path = urlStr;
@@ -1553,8 +1563,7 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
                 // YouTube  or video or HTML
                 if(responseCode == 200) {
                     // play YouTube
-                    if(urlStr.contains("youtube") || urlStr.contains("youtu.be"))
-                    {
+                    if(urlStr.contains("youtube") || urlStr.contains("youtu.be")) {
                         // auto play
                         if (Pref.isAutoPlayByList(act) ||
                             Pref.isAutoPlayByCategory(act)) {

@@ -118,7 +118,9 @@ public class DbBuilder_video {
                     System.out.println("DbBuilder_video / _buildMedia / cardImageUrl = " + cardImageUrl);
 
                     // for YouTube link
-                    if(( !linkUrl.contains("playlist") && (linkUrl.contains("youtube") || linkUrl.contains("youtu.be")) ) ) {
+                    if(( !linkUrl.contains("playlist") &&
+                         !linkUrl.contains("youtube.com/channel/") &&
+                         (linkUrl.contains("youtube") || linkUrl.contains("youtu.be")) ) ) {
                         cardImageUrl = "https://img.youtube.com/vi/" + Utils.getYoutubeId(linkUrl) + "/0.jpg";
                     }
                     // for HTML link

@@ -84,7 +84,7 @@ public class AddCategoryFragment extends VerticalGridSupportFragment  {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        System.out.println("SelectLinkSrcFragment / _onCreate");
+        System.out.println("AddCategorySrcFragment / _onCreate");
 
         super.onCreate(savedInstanceState);
 
