@@ -108,7 +108,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment
         super.onCreate(savedInstanceState);
 
         prepareBackgroundManager();
-        mVideoCursorAdapter = new CursorObjectAdapter(new CardPresenter());
+        mVideoCursorAdapter = new CursorObjectAdapter(new CardPresenter(getActivity(),-1));
         mVideoCursorAdapter.setMapper(mVideoCursorMapper);
 
         mSelectedVideo = (Video) getActivity().getIntent()
@@ -249,14 +249,14 @@ public class VideoDetailsFragment extends DetailsSupportFragment
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case RELATED_VIDEO_LOADER: {
-                String category = args.getString(VideoContract.CategoryEntry.COLUMN_CATEGORY_NAME);
-                System.out.println("VideoDetailsFragment / _onCreateLoader / category = " + category);
+                String title = args.getString(VideoContract.VideoEntry.COLUMN_ROW_TITLE );
+                System.out.println("VideoDetailsFragment / _onCreateLoader / title = " + title);
                 return new CursorLoader(
                         getActivity(),
                         VideoContract.VideoEntry.CONTENT_URI,
                         null,
                         VideoContract.VideoEntry.COLUMN_ROW_TITLE + " = ?",
-                        new String[]{category},
+                        new String[]{title},
                         null
                 );
 
@@ -371,7 +371,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment
                     public void onResourceReady(
                             Bitmap resource,
                             Transition<? super Bitmap> transition) {
-                        System.out.println("onResourceReady");
+                        System.out.println("VideoDetailsFragment / _onResourceReady");
                         row.setImageBitmap(getActivity(), resource);
                         startEntranceTransition();
                     }
@@ -404,10 +404,11 @@ public class VideoDetailsFragment extends DetailsSupportFragment
         String subcategories[] = {getString(R.string.related_movies)};
 
         // Generating related video list.
-        String category = mSelectedVideo.rowTitle;
+        String title = mSelectedVideo.rowTitle;
 
         Bundle args = new Bundle();
-        args.putString(VideoContract.CategoryEntry.COLUMN_CATEGORY_NAME, category);
+        args.putString(VideoContract.VideoEntry.COLUMN_ROW_TITLE, title);
+
         getLoaderManager().initLoader(RELATED_VIDEO_LOADER, args, this);
 
         HeaderItem header = new HeaderItem(0, subcategories[0]);

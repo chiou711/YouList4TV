@@ -1,5 +1,6 @@
 package com.cw.youlist4tv;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -22,7 +23,7 @@ public class Pref {
 		return sharedPreferences.getBoolean(context.getString(R.string.pref_key_auto_play_by_category), DEFAULT_AUTO_PLAY_BY_CATEGORY);
 	}
 
-	public static boolean isShowDuration(Context context) {
+	public static boolean isShowDuration(Activity context) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		return sharedPreferences.getBoolean(context.getString(R.string.pref_key_show_duration), DEFAULT_SHOW_YOUTUBE_DURATION);
 	}

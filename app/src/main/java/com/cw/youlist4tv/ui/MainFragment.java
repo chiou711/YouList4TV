@@ -371,16 +371,6 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
                     // switch category by onItemClicked
                     switchCategory(item);
                 }
-//                } else if (((String) item).contains(getString(R.string.guidedstep_first_title))) {
-//                    Intent intent = new Intent(act, GuidedStepActivity.class);
-//                    Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(act).toBundle();
-//                    startActivity(intent, bundle);
-//                } else if (((String) item).contains(getString(R.string.error_fragment))) {
-//                    BrowseErrorFragment errorFragment = new BrowseErrorFragment();
-//                    getFragmentManager().beginTransaction().replace(R.id.main_frame, errorFragment).addToBackStack(null).commit();
-//                } else {
-                    //Toast.makeText(act, ((String) item), Toast.LENGTH_SHORT).show();
-
             }
         }
     }
@@ -416,7 +406,7 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
                             cancelYouTubeHandler();
                         }
                     })
-                    .setNegativeButton(act.getString(R.string.guidedstep_continue), new DialogInterface.OnClickListener()
+                    .setNegativeButton(act.getString(R.string.button_continue), new DialogInterface.OnClickListener()
                     {
                         // continue
                         @Override
